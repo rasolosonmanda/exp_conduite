@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilan de conduite</title>
+    <script>
+        let listeExp = [];
+        let experiences = localStorage.getItem('listeExp');
+
+        if (experiences != null) {
+            listeExp = JSON.parse(experiences);
+        }
+
+        document.onreadystatechange = function () {
+            if (document.readyState === "complete") {
+                afficheListeExperience();
+                calculerDistanceTotale();
+            }
+        };
+
+        function afficheListeExperience() {
+            let listeExperience = localStorage.getItem('listeExp');
+            if (listeExperience !== null) {
+                listeExperience = JSON.parse(listeExperience);
+                let table = document.getElementById('tableau');
+                let tbody = table.getElementsByTagName('tbody')[0];
+                tbody.innerHTML = '';
+
+                listeExperience.forEach(function (experience) {
+                    let row = tbody.insertRow();
+                    let cellId = row.insertCell();
+                    let cellNom = row.insertCell();
+                    let cellPrenom = row.insertCell();
+                    let cellDate = row.insertCell();
+                    let cellMeteo = row.insertCell();
+                    let cellDistance = row.insertCell();
+
+                    cellId.innerHTML = experience.id;
+                    cellNom.innerHTML = experience.nom;
+                    cellPrenom.innerHTML = experience.prenom;
+                    cellDate.innerHTML = experience.dateconduite;
+                    cellMeteo.innerHTML = experience.meteo;
+                    cellDistance.innerHTML = experience.distance;
+                });
+            }
+        }
+
+        function calculerDistanceTotale() {
+            let listeExperience = localStorage.getItem('listeExp');
+            if (listeExperience !== null) {
+                listeExperience = JSON.parse(listeExperience);
+                let distanceTotale = 0;
+
+                listeExperience.forEach(function (experience) {
+                    distanceTotale += parseInt(experience.distance);
+                });
+
+                let paragraphe = document.createElement('p');
+                paragraphe.innerHTML = "Distance totale parcourue : " + distanceTotale;
+                document.body.appendChild(paragraphe);
+            }
+        }
+    </script>
+    <style>
+      body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  padding: 20px;
+}
+div{
+  
+  width: max-content;
+  height: max-content;    
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+#tableau {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+}
+
+#tableau th,
+#tableau td {
+  padding: 10px;
+  text-align: center;
+}
+
+#tableau thead tr {
+  background-color: #333333;
+}
+
+#tableau thead th {
+  color: #ffffff;
+}
+
+#tableau tbody tr:nth-child(even) {
+  background-color: #555555;
+}
+
+#tableau tbody tr:hover {
+  background-color: #777777;
+}
+
+input[type="submit"] {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover {
+  background-color: #eeeeee;
+}
+
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+p {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 50px;
+  border: 2px solid #333;
+  color: #fff;
+  background: linear-gradient(to right, #000000, #ffffff);
+  transition: all 0.3s ease-in-out;
+  margin-left: 10px;
+  
+}
+
+.button:hover {
+  background: linear-gradient(to right, #ffffff, #000000);
+  border-color: #ffffff;
+  cursor: pointer;
+}
+h4{
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bilan</h1>
+    <section id="listeExperience">
+      <h4>Voici le récapitulatif de votre experience de conduite:</h4>
+        <table id="tableau">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Date de conduite</th>
+                    <th>Météo</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <div class="btn">
+    <a href="javascript:localStorage.removeItem('listeExp'); location.reload();">
+        <span class="button">Effacer tout</span>
+    </a>
+    <a href="index.html">
+      <span class="button">saisir</span>
+    </a>
+  </div>
+</body>
+</html>
